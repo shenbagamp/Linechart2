@@ -19,6 +19,9 @@ import java.util.ArrayList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+
+import static com.example.shenbagampalanisamy.linechart2.R.drawable.ic_tag_faces;
+
 public class MainActivity extends AppCompatActivity {
     DrawView  drawLine;
     int h,w,x,y;
@@ -28,7 +31,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+         setContentView(R.layout.activity_main);
+
         try {
             InputStream is = getAssets().open("data.xml");
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -41,8 +45,8 @@ public class MainActivity extends AppCompatActivity {
                 Node node = nList.item(i);
                 if (node.getNodeType() == Node.ELEMENT_NODE) {
                     Element element2 = (Element) node;
-                    w = Integer.parseInt(getValue("width", element2));
-                    h = Integer.parseInt(getValue("hight", element2));
+                   // w = Integer.parseInt(getValue("width", element2));
+                  //  h = Integer.parseInt(getValue("hight", element2));
                     x = Integer.parseInt(getValue("xaxies", element2));
                     y = Integer.parseInt(getValue("yaxies", element2));
                 }
@@ -74,8 +78,9 @@ public class MainActivity extends AppCompatActivity {
         BeanClass b = new BeanClass(w,h,x,y,Xaxis,Yaxis);
         // Log.i("txt", String.valueOf(Xaxis.get(0)));
 
-        DrawView d=new DrawView(this);
+//        DrawView d=new DrawView(this);
 
+/*
         RelativeLayout rel=(RelativeLayout)findViewById(R.id.relt);
         int w=b.getWidth();
         int h=b.getHeight();
@@ -87,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
         d.setBackgroundColor(Color.GRAY);
         Drawable d1=d.getBackground();
         d1.setAlpha(51);
+*/
 
 
 
@@ -94,10 +100,11 @@ public class MainActivity extends AppCompatActivity {
          //   super(context, attrs);
 
 
-        rel.addView(d);
+  //      rel.addView(d);
 
+        DrawView dr=(DrawView) findViewById(R.id.id1);
+        dr.setValue(b);
 
-        d.setValue(b);
         //final int num = d.getBackground().getOpacity();
         // setContentView(d);
     }

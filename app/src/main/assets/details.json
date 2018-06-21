@@ -1,0 +1,38 @@
+{
+  "records": {
+    "chart": {
+      "width": "800",
+      "hight": "1100",
+      "xaxies": "100",
+      "yaxies": "100"
+    },
+    "range": {
+      "maxval": {
+        "rx": "50",
+        "xm": "100",
+        "ry": "100",
+        "ym": "1000"
+      }
+    },
+    "points": {
+      "plot": [
+        {
+          "xaxis_point": "100",
+          "yaxis_points": "10"
+        },
+        {
+          "xaxis_point": "200",
+          "yaxis_points": "30"
+        },
+        {
+          "xaxis_point": "400",
+          "yaxis_points": "40"
+        },
+        {
+          "xaxis_point": "500",
+          "yaxis_points": "70"
+        }
+      ]
+    }
+  }
+}

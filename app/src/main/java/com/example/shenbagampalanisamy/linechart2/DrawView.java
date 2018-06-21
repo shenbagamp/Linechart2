@@ -1,23 +1,18 @@
 package com.example.shenbagampalanisamy.linechart2;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.Rect;
-import android.graphics.RectF;
-import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 public class DrawView extends View {
@@ -27,9 +22,20 @@ public class DrawView extends View {
     Canvas canvas=new Canvas();
     String[] str;
     String[] num;
+
     public DrawView(Context context) {
         super(context);
     }
+
+    public DrawView(Context context, @Nullable AttributeSet attrs) {
+        super(context, attrs);
+    }
+
+    public DrawView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+    }
+
+
     public void setValue(BeanClass b) {
         bean=b;
         postInvalidate();
@@ -38,11 +44,20 @@ public class DrawView extends View {
     public void onDraw(Canvas canvas) {
         int w=0;
         int h=0;
+        int w1=0;
+        int h1=0;
         if(bean!=null) {
-            w = bean.getWidth()-100;
+            w1=canvas.getWidth();
+            int padding1=(20*w1)/100;
+            Log.i("padding1", String.valueOf(padding1));
+            w=w1-padding1;
+            Log.i("width",String.valueOf(w));
+            // w = bean.getWidth()-100;
             Log.i("width11",Integer.toString(w));
-            h =bean.getHeight()-200;
-            Log.i("height11",Integer.toString(h));
+            h1 =canvas.getHeight();
+            int padding2=(20*h1)/100;
+            Log.i("padding2", String.valueOf(padding2));
+            h=h1-padding2;
             ArrayList Xaxis=new ArrayList(bean.getXaxis());
             ArrayList Yaxis=new ArrayList(bean.getYaxis());
           // int xaxis[] = new int[]{100,440,510,600,200};
@@ -52,8 +67,8 @@ public class DrawView extends View {
            int re=checkFormate(Xaxis,Yaxis);
             Log.i("string",String.valueOf(re));
 
-               int top = 200;
-               int left = 200;
+               int top = padding1;
+               int left = padding2;
                int r_left = left;
                int r_right = w;
                int r_top = top;
@@ -62,29 +77,31 @@ public class DrawView extends View {
                paint.setStrokeWidth(3);
                paint.setStyle(Paint.Style.STROKE);
                paint.setStrokeWidth(0);
-               drawline1(canvas, r_left, r_top, r_right, r_bottom);
+            canvas.drawRect(r_left, r_top, r_right, r_bottom, paint);
                paint.setStrokeWidth(7);
                paint.setColor(Color.BLACK);
                canvas.drawLine(r_left, r_top, r_left, r_bottom, paint);
-               canvas.drawLine(r_left, r_bottom, r_right + 100, r_bottom, paint);
+              canvas.drawLine(r_left, r_bottom, r_right, r_bottom, paint);
+          //  Bitmap b1= BitmapFactory.decodeResource(getResources(), R.drawable.ic_tag_faces);
+           // canvas.drawBitmap(b1, 0, 0, paint);
 
             if(re==1)
             {
-                integerValue(w,h,top,r_left,r_right,r_bottom,r_top,Xaxis,Yaxis,canvas,map,map1);
+                integerValue(w,h,top,r_left,r_right,r_bottom,r_top,Xaxis,Yaxis,canvas,map,map1,padding1,padding2);
             }
             else
             {
-                stringValue(w,h,top,r_left,r_right,r_bottom,r_top,Xaxis,Yaxis,canvas,map,map1);
+                stringValue(w,h,top,r_left,r_right,r_bottom,r_top,Xaxis,Yaxis,canvas,map,map1,padding1,padding2);
             }
         }else{
             return;
         }
     }
 
-    private void stringValue(int w, int h, int top, int r_left, int r_right, int r_bottom, int r_top, ArrayList xaxis, ArrayList yaxis, Canvas canvas1, Map<String, Integer> map, Map<String, Integer> map1) {
+    private void stringValue(int w, int h, int top, int r_left, int r_right, int r_bottom, int r_top, ArrayList xaxis, ArrayList yaxis, Canvas canvas1, Map<String, Integer> map, Map<String, Integer> map1, int padding1, int padding2) {
 
-        int m=(w-200)/xaxis.size();
-        int n=(h-200)/yaxis.size();
+        int m=(w-padding1)/xaxis.size();
+        int n=(h-padding2)/yaxis.size();
         int x = r_left + m;
         int y = r_bottom + 50;
         int x1 = r_left- 50;
@@ -95,7 +112,8 @@ public class DrawView extends View {
         paint.setAntiAlias(true);
         for (int i = 0; i < xaxis.size(); i++) {
             canvas1.drawText((String) xaxis.get(i), x, y, paint);
-            canvas1.drawLine(x, r_top, x, r_bottom, paint);
+            canvas1.drawLine(x,  r_bottom, x, r_bottom, paint);
+         //   canvas.drawLine(r_left, r_bottom, r_right, r_bottom, paint);
             map.put(xaxis.get(i).toString(), x);
 
             x = x + m;
@@ -107,7 +125,7 @@ public class DrawView extends View {
             map1.put(yaxis.get(i).toString(), y1);
             y1 = y1 - n;
         }
-        textPath(top,r_bottom,h,canvas1,paint);
+        textPath(top,r_bottom,h,canvas1,paint, padding1, padding2);
         int x_i[] = new int[map.size()];
         int y_i[] = new int[map1.size()];
         int num = 0;
@@ -118,28 +136,20 @@ public class DrawView extends View {
             int a = (int)map.get(xaxis.get(p));
             x_i[num] = a;
             num++;
-
-
-
-
-
             int b = (int)map1.get(yaxis.get(p));
             y_i[num1] = b;
             num1++;
             canvas1.drawCircle(a, b, 5, paint);
             Paint p2=new Paint();
             p2.setColor(Color.BLACK);
-            canvas1.drawCircle(203.2f,594.5f,6.0f,p2);
+           // canvas1.drawCircle(203.2f,594.5f,6.0f,p2);
         }
         Paint p1=new Paint();
         p1.setColor(Color.BLACK);
         for (int w11 = 0; w11 <xaxis.size() - 1; w11++) {
             canvas1.drawLine(x_i[w11], y_i[w11], x_i[w11 + 1], y_i[w11 + 1], p1);
-
         }
-
     }
-
     public int checkFormate(ArrayList xaxis1, ArrayList yaxis1) {
         String a=(String)xaxis1.get(0);
         String b=(String)yaxis1.get(0);
@@ -156,7 +166,6 @@ public class DrawView extends View {
                 count++;
             }
         }
-
         for(int i=0;i<len2;i++)
         {
             if(Character.isDigit(b.charAt(i)))
@@ -179,16 +188,13 @@ public class DrawView extends View {
         if(flag==1&&flag1==1)
         {
             return 1;
-
         }
         else
         {
             return 0;
         }
-
     }
-
-    private void integerValue(int w1, int h1, int top, int r_left1, int r_right1, int r_bottom1, int r_top1, ArrayList xaxis1, ArrayList yaxis1, Canvas canvas, Map<String, Integer> map, Map<String, Integer> map1) {
+    private void integerValue(int w1, int h1, int top, int r_left1, int r_right1, int r_bottom1, int r_top1, ArrayList xaxis1, ArrayList yaxis1, Canvas canvas, Map<String, Integer> map, Map<String, Integer> map1, int padding1, int padding2) {
 
         int xsize=xaxis1.size();
         int xaxis[]=new int[xsize];
@@ -245,15 +251,15 @@ public class DrawView extends View {
             }
             count1++;
         }
-        int n = (h1 - 200) / yscale1.size();
-        int m = (w1 - 200) / xscale1.size();
+        int n = (h1 - padding2) / yscale1.size();
+        int m = (w1 - padding1) / xscale1.size();
         int x = r_left1 + m;
-        int y = r_bottom1 + 50;
-        int x1 = r_left1 - 50;
+        int y = r_bottom1 +25;
+        int x1 = r_left1 - 25;
         int y1 = r_bottom1 - n;
         paint.setStrokeWidth(2);
         paint.setColor(Color.RED);
-        paint.setTextSize(20);
+        paint.setTextSize(getWidth()/30 );
         paint.setAntiAlias(true);
         int pix =(int) m / value;
         for (int i = 0; i < xscale1.size(); i++) {
@@ -289,7 +295,7 @@ public class DrawView extends View {
             }
             y1 = y1 - n;
         }
-        textPath(top,r_bottom1,h1,canvas,paint);
+        textPath(top,r_bottom1,h1,canvas,paint,padding1,padding2);
         int x_i[] = new int[map.size()];
         int y_i[] = new int[map1.size()];
         int num = 0;
@@ -311,32 +317,20 @@ public class DrawView extends View {
         }
 
     }
-
-    private void textPath(int top, int r_bottom, int h, Canvas canvas2, Paint paint2) {
+    private void textPath(int top, int r_bottom, int h, Canvas canvas2, Paint paint2, int padding1, int padding2) {
         Path path = new Path();
         paint2.setColor(Color.TRANSPARENT);
-        path.moveTo(top - 100, r_bottom);
-        path.lineTo(top - 100, r_bottom - 200);
-        path.lineTo(top - 100, r_bottom - 300);
+        path.moveTo(padding1/2, r_bottom);
+        path.lineTo(padding1/2, r_bottom-300 );
+        path.lineTo(padding1/2, r_bottom-300);
         canvas2.drawPath(path, paint2);
         paint2.setStrokeWidth(0);
-        paint2.setTextSize(30);
+        paint2.setTextSize(getWidth()/20);
         paint2.setColor(Color.MAGENTA);
-        canvas2.drawTextOnPath("Y_axies_values", path, 0, 0, paint2);
-        canvas2.drawTextOnPath("Y_axies_values", path, 0, 0, paint2);
-        canvas2.drawText("X_axies_values", top + 100, h + 200, paint2);
+        canvas2.drawTextOnPath("Y_axies_values", path, getHeight()/10, 0, paint2);
+        //canvas2.drawTextOnPath("Y_axies_values", path, 0, 0, paint2);
+
+        canvas2.drawText("X_axies_values", getWidth()/2, h+padding2 , paint2);
     }
-    private void plot(Map map, Map map1, ArrayList xaxis, ArrayList yaxis, Canvas canvas1) {
-
-
-    }
-
-
-    public void drawline1(Canvas canvas, int r_left, int r_top, int r_right, int r_bottom)
-    {
-        paint.setColor(Color.BLACK);
-        canvas.drawRect(r_left, r_top, r_right, r_bottom, paint);
-    }
-    
 }
 

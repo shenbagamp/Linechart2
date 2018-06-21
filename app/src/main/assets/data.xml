@@ -5,9 +5,7 @@
         <hight>1100</hight>
         <xaxies>100</xaxies>
         <yaxies>100</yaxies>
-
     </chart>
-
     <range>
         <maxval>
             <rx>50</rx>
@@ -17,31 +15,25 @@
         </maxval>
     </range>
     <points>
-
         <plot>
             <xaxis_point>100</xaxis_point>
-            <yaxis_points>8</yaxis_points>
+            <yaxis_points>10</yaxis_points>
         </plot>
 
 
         <plot>
+            <xaxis_point>200</xaxis_point>
+            <yaxis_points>30</yaxis_points>
+        </plot>
+
+        <plot>
             <xaxis_point>400</xaxis_point>
-            <yaxis_points>6</yaxis_points>
+            <yaxis_points>40</yaxis_points>
         </plot>
 
         <plot>
             <xaxis_point>500</xaxis_point>
-            <yaxis_points>5</yaxis_points>
-        </plot>
-
-        <plot>
-            <xaxis_point>600</xaxis_point>
-            <yaxis_points>3</yaxis_points>
-        </plot>
-
-        <plot>
-            <xaxis_point>200</xaxis_point>
-            <yaxis_points>7</yaxis_points>
+            <yaxis_points>70</yaxis_points>
         </plot>
 
     </points>
